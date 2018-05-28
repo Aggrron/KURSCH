@@ -5,6 +5,8 @@ class Figure:
         self.x = fig_x
         self.y = fig_y
         self.bitmap = pygame.image.load(filename)
+        #squareWX = int(squareW[0]*0.9)
+        #squareWY = int(squareW[1]*0.9)
         self.bitmap = pygame.transform.scale(self.bitmap, squareW)
 
 
@@ -29,8 +31,8 @@ def Dragging(object, mouse_x, mouse_y, offset_x, offset_y):
 
 pygame.init()
 #Параметры экрана
-display_w = 860
-display_h = 640
+display_w = 900
+display_h = 900
 #Цвета
 black = (0, 0, 0)
 grey = (100, 100, 100)
@@ -46,15 +48,31 @@ clock = pygame.time.Clock()
 fieldImg = pygame.image.load('chess field.png')
 fieldSize = ((display_w*2)//3, (display_w*2)//3)
 fieldX = display_w/2 - fieldSize[0]/2
-fieldY = display_h/2 - fieldSize[1]/2
+fieldY = display_h/2 - fieldSize[0]/2
 fieldImg = pygame.transform.scale(fieldImg, fieldSize)
-squareW = (int((fieldSize[0]//8)*0.8), int((fieldSize[1]//8)*0.8))
-square_coordinates = []
-for x in range(8):
-    set = (fieldX, fieldY)
+squareW = (int((fieldSize[0]//8)), int((fieldSize[1]//8)))
 
+
+# Получение границ квадратов поля
+def coordinates(square_coordinates, row_coords, fieldX, fieldY, squareW):
+    fX = fieldX
+    fY = fieldY
+    for y in range(8):
+        for x in range(8):
+            coords = (fX, fY)
+            row_coords.append(coords)
+            fX += squareW[0]
+        fX = fieldX
+        square_coordinates.append(row_coords)
+        fY += squareW[1]
+        row_coords = []
+square_coordinates = []
+row_coords = []
+coordinates(square_coordinates, row_coords, fieldX, fieldY, squareW)
+print(square_coordinates[6][2])
 def field(x, y):
     gameDisplay.blit(fieldImg, (x, y))
+
 
 
 #Фигуры
@@ -83,6 +101,7 @@ while not done:
             done = True
 # - - - - -  Отслеживание инпута мыши - - - - -
         elif e.type == pygame.MOUSEBUTTONDOWN:
+            print(mouse_x, mouse_y)
             if e.button == 1:
                 for obj in b_pawns:
                     if collision(mouse_x, mouse_y, obj.x, obj.y, squareW[0]):
@@ -96,10 +115,23 @@ while not done:
         elif e.type == pygame.MOUSEBUTTONUP:
             if e.button == 1:
                 dragging = False
+            # Привязка фигур к квадратам
+            for obj in b_pawns:
+                for row in square_coordinates:
+                    for x in row:
+                        if collision(obj.x+squareW[0]//2, obj.y+squareW[0]//2, x[0], x[1], squareW[0]):
+                            obj.x = x[0]
+                            obj.y = x[1]
         elif e.type == pygame.MOUSEMOTION:
+
             for obj in b_pawns:
                 if dragging:
                     Dragging(dragging_object, mouse_x, mouse_y, offset_x, offset_y)
+
+
+
+
+
 
 
 
@@ -116,7 +148,7 @@ while not done:
     for obj in b_pawns:
         obj.render()
     pygame.display.update()
-    clock.tick(120)
+    clock.tick(60)
 
 pygame.quit()
 quit()
