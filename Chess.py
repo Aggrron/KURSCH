@@ -1,22 +1,26 @@
 import pygame
 
 class Figure:
-    def __init__(self, fig_x, fig_y, filename, squareW, name):
-        self.x = fig_x
-        self.y = fig_y
+    def __init__(self, coords, filename, squareW, name):
+        self.x = coords[0]
+        self.y = coords[1]
         self.bitmap = pygame.image.load(filename)
         #squareWX = int(squareW[0]*0.9)
         #squareWY = int(squareW[1]*0.9)
         self.bitmap = pygame.transform.scale(self.bitmap, squareW)
         self.name = name
 
-
     def render(self):
-
         gameDisplay.blit(self.bitmap, (self.x, self.y))
 
-class Pawn(Figure):
-    pass
+
+class PawnB(Figure):
+    def correct_move(self, native_square, attacked_square):
+        pass
+
+
+
+
 # Вспомогательные функции
 # Детекция коллижна мышки и объекта
 def collision(mouse_x, mouse_y ,obj_x ,obj_y, len):
@@ -43,7 +47,7 @@ def pressed_square(mouse_x, mouse_y, square_coordinates, squareW, fieldX, fieldY
             row_index += 1
         return result
     else:
-        result = (0, 0)
+        result = (-1, -1)
         return result
 
 
@@ -100,44 +104,60 @@ def states(states):
             row.append('None')
         square_states.append(row)
         row = []
-
 states(square_states)
-for rx in square_states:
-    print(rx)
-
-
 
 #-------------------------------------------------------
 
 #Фигуры
-bp1 = Pawn(100, 100, "black_pawn.png", squareW, "b_pawn")
-bp2 = Pawn(150, 100, "black_pawn.png", squareW, "b_pawn")
-bp3 = Pawn(200, 100, "black_pawn.png", squareW, "b_pawn")
-bp4 = Pawn(250, 100, "black_pawn.png", squareW, "b_pawn")
-bp5 = Pawn(300, 100, "black_pawn.png", squareW, "b_pawn")
-bp6 = Pawn(350, 100, "black_pawn.png", squareW, "b_pawn")
-bp7 = Pawn(400, 100, "black_pawn.png", squareW, "b_pawn")
-bp8 = Pawn(450, 100, "black_pawn.png", squareW, "b_pawn")
+bp1 = PawnB(square_coordinates[1][0], "black_pawn.png", squareW, "b_pawn")
+bp2 = PawnB(square_coordinates[1][1], "black_pawn.png", squareW, "b_pawn")
+bp3 = PawnB(square_coordinates[1][2], "black_pawn.png", squareW, "b_pawn")
+bp4 = PawnB(square_coordinates[1][3], "black_pawn.png", squareW, "b_pawn")
+bp5 = PawnB(square_coordinates[1][4], "black_pawn.png", squareW, "b_pawn")
+bp6 = PawnB(square_coordinates[1][5], "black_pawn.png", squareW, "b_pawn")
+bp7 = PawnB(square_coordinates[1][6], "black_pawn.png", squareW, "b_pawn")
+bp8 = PawnB(square_coordinates[1][7], "black_pawn.png", squareW, "b_pawn")
+
 b_pawns = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8]
+figures = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8]
 
 
 
 done = False
 dragging = False
 
+def start_states(states, coords, figures, len):
+    for obj in figures:
+        row_n = 0
+        x_n = 0
+        for row in coords:
+            for x in row:
+                if collision(obj.x + len//2, obj.y + len//2, x[0], x[1], len):
+                    states[row_n][x_n] = obj.name
+                x_n += 1
+            x_n = 0
+            row_n += 1
+
+start_states(square_states, square_coordinates, figures, squareW[0])
+
+for row in square_states:
+    print(row)
+
 while not done:
     # Обработчик событий
     mouse_x = pygame.mouse.get_pos()[0]
     mouse_y = pygame.mouse.get_pos()[1]
+
     for e in pygame.event.get():
 # - - - - - - -  Выход - - - - - - -
         if e.type == pygame.QUIT:
             done = True
 # - - - - -  Отслеживание инпута мыши - - - - -
+        # Нажатие конпки мыши
         elif e.type == pygame.MOUSEBUTTONDOWN:
             print(mouse_x, mouse_y)
             print(pressed_square(mouse_x, mouse_y, square_coordinates, squareW[0], fieldX, fieldY))
-
+            # Передвижние фигур мышкой
             if e.button == 1:
                 for obj in b_pawns:
                     if collision(mouse_x, mouse_y, obj.x, obj.y, squareW[0]):
@@ -149,6 +169,7 @@ while not done:
                         index_set = pressed_square(mouse_x, mouse_y, square_coordinates, squareW[0], fieldX, fieldY)
                         square_states[index_set[0]][index_set[1]] = "None"
                         dragging_object = obj
+        # Отжатие кнопки мыши
         elif e.type == pygame.MOUSEBUTTONUP:
             if e.button == 1:
                 dragging = False
@@ -156,12 +177,13 @@ while not done:
             for obj in b_pawns:
                 row_n = 0 # Вспомогательный кал для другого массива статуса квадратов, лучше ничего не придумал
                 x_n = 0
+
                 for row in square_coordinates:
                     for x in row:
                         if collision(obj.x+squareW[0]//2, obj.y+squareW[0]//2, x[0], x[1], squareW[0]):
-                             obj.x = x[0]
-                             obj.y = x[1]
-                             square_states[row_n][x_n] = obj.name
+                            obj.x = x[0]
+                            obj.y = x[1]
+                            square_states[row_n][x_n] = obj.name
                         x_n += 1
                     x_n = 0
                     row_n += 1
