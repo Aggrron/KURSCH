@@ -13,10 +13,25 @@ class Figure:
     def render(self):
         gameDisplay.blit(self.bitmap, (self.x, self.y))
 
+    def return_to_native(self, native_square_index, squares_coords):
+        index_x = native_square_index[0]
+        index_y = native_square_index[1]
+        self.x = squares_coords[index_x][index_y][0]
+        self.y = squares_coords[index_x][index_y][1]
+
+    def dragging(self, mouse_x, mouse_y, offset_x, offset_y):
+        self.x = mouse_x + offset_x
+        self.y = mouse_y + offset_y
+
 
 class PawnB(Figure):
-    def correct_move(self, native_square, attacked_square):
-        pass
+    def correct_move(self, native_square_index, attacked_square_index):
+        if attacked_square_index[0] - native_square_index[0] == 1:
+            return True
+        else:
+            return False
+
+
 
 
 
@@ -92,7 +107,6 @@ def coordinates(square_coordinates, row_coords, fieldX, fieldY, squareW):
 square_coordinates = []
 row_coords = []
 coordinates(square_coordinates, row_coords, fieldX, fieldY, squareW)
-print(square_coordinates[6][2])
 def field(x, y):
     gameDisplay.blit(fieldImg, (x, y))
 
@@ -140,9 +154,6 @@ def start_states(states, coords, figures, len):
 
 start_states(square_states, square_coordinates, figures, squareW[0])
 
-for row in square_states:
-    print(row)
-
 while not done:
     # Обработчик событий
     mouse_x = pygame.mouse.get_pos()[0]
@@ -155,10 +166,11 @@ while not done:
 # - - - - -  Отслеживание инпута мыши - - - - -
         # Нажатие конпки мыши
         elif e.type == pygame.MOUSEBUTTONDOWN:
-            print(mouse_x, mouse_y)
-            print(pressed_square(mouse_x, mouse_y, square_coordinates, squareW[0], fieldX, fieldY))
+            dragging_object = None
             # Передвижние фигур мышкой
             if e.button == 1:
+                index_set = pressed_square(mouse_x, mouse_y, square_coordinates, squareW[0], fieldX, fieldY)
+                print(index_set)
                 for obj in b_pawns:
                     if collision(mouse_x, mouse_y, obj.x, obj.y, squareW[0]):
                         dragging = True
@@ -166,44 +178,37 @@ while not done:
                         obj.y = mouse_y - squareW[0] // 2
                         offset_x = obj.x - mouse_x
                         offset_y = obj.y - mouse_y
-                        index_set = pressed_square(mouse_x, mouse_y, square_coordinates, squareW[0], fieldX, fieldY)
+                        #index_set = pressed_square(mouse_x, mouse_y, square_coordinates, squareW[0], fieldX, fieldY)
                         square_states[index_set[0]][index_set[1]] = "None"
                         dragging_object = obj
         # Отжатие кнопки мыши
         elif e.type == pygame.MOUSEBUTTONUP:
             if e.button == 1:
+                index_set_up = pressed_square(mouse_x, mouse_y, square_coordinates, squareW[0], fieldX, fieldY)
                 dragging = False
             # Привязка фигур к квадратам
-            for obj in b_pawns:
-                row_n = 0 # Вспомогательный кал для другого массива статуса квадратов, лучше ничего не придумал
+            row_n = 0  # Вспомогательный кал для другого массива статуса квадратов, лучше ничего не придумал
+            x_n = 0
+            for row in square_coordinates:
+                for x in row:
+                    if dragging_object is not None:
+                        if collision(dragging_object.x + squareW[0] // 2, dragging_object.y + squareW[0] // 2, x[0], x[1], squareW[0]):
+                            if dragging_object.correct_move(index_set, index_set_up):
+                                dragging_object.x = x[0]
+                                dragging_object.y = x[1]
+                                square_states[row_n][x_n] = dragging_object.name
+                            else:
+                                print(index_set)
+                                dragging_object.return_to_native(index_set, square_coordinates)
+                    x_n += 1
                 x_n = 0
-
-                for row in square_coordinates:
-                    for x in row:
-                        if collision(obj.x+squareW[0]//2, obj.y+squareW[0]//2, x[0], x[1], squareW[0]):
-                            obj.x = x[0]
-                            obj.y = x[1]
-                            square_states[row_n][x_n] = obj.name
-                        x_n += 1
-                    x_n = 0
-                    row_n += 1
-                row_n = 0
-            for rx in square_states:
-                print(rx)
+                row_n += 1
+            row_n = 0
+            #for rx in square_states:
+                #print(rx)
         elif e.type == pygame.MOUSEMOTION:
-            for obj in b_pawns:
-                if dragging:
-                    Dragging(dragging_object, mouse_x, mouse_y, offset_x, offset_y)
-
-
-
-
-
-
-
-
-
-
+            if dragging:
+                dragging_object.dragging(mouse_x, mouse_y, offset_x, offset_y)
 
 
 
