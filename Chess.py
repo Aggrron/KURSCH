@@ -23,10 +23,25 @@ class Figure:
         self.x = mouse_x + offset_x
         self.y = mouse_y + offset_y
 
+    def is_my_turn(self, turn):
+        if self.name[0] == turn:
+            return True
+        else:
+            print("Not my turn!!")
+            return False
+
 
 class PawnB(Figure):
     def correct_move(self, native_square_index, attacked_square_index):
         if attacked_square_index[0] - native_square_index[0] == 1:
+            return True
+        else:
+            return False
+
+
+class PawnW(Figure):
+    def correct_move(self, native_square_index, attacked_square_index):
+        if native_square_index[0] - attacked_square_index[0] == 1:
             return True
         else:
             return False
@@ -66,8 +81,24 @@ def pressed_square(mouse_x, mouse_y, square_coordinates, squareW, fieldX, fieldY
         return result
 
 
+def display_turn(turn, color):
+    if turn[0] == 'w':
+        textsurface = myfont.render('White turn', False, color)
+        gameDisplay.blit(textsurface, (0, 0))
+    if turn[0] =='b':
+        textsurface = myfont.render('Black turn', False, color)
+        gameDisplay.blit(textsurface, (0,0))
+
+
+def change_turn(obj):
+    if obj.name[0] == 'w':
+        return True
+    elif obj.name[0] == 'b':
+        return False
+
 
 pygame.init()
+
 #Параметры экрана
 display_w = 860
 display_h = 640
@@ -76,10 +107,15 @@ black = (0, 0, 0)
 grey = (100, 100, 100)
 white = (255, 255, 255)
 fancyBlue = (71, 71, 71)
+# Текст на экране
+font_size = 25
 
 gameDisplay = pygame.display.set_mode((display_w, display_h))
 pygame.display.set_caption("Chess")
 clock = pygame.time.Clock()
+pygame.font.init()
+myfont = pygame.font.SysFont('Comic Sans MS', font_size)
+
 
 
 #----------------------------Параметры поля-----------------------
@@ -132,13 +168,24 @@ bp6 = PawnB(square_coordinates[1][5], "black_pawn.png", squareW, "b_pawn")
 bp7 = PawnB(square_coordinates[1][6], "black_pawn.png", squareW, "b_pawn")
 bp8 = PawnB(square_coordinates[1][7], "black_pawn.png", squareW, "b_pawn")
 
+wp1 = PawnW(square_coordinates[6][0], "white_pawn.png", squareW, "w_pawn")
+wp2 = PawnW(square_coordinates[6][1], "white_pawn.png", squareW, "w_pawn")
+wp3 = PawnW(square_coordinates[6][2], "white_pawn.png", squareW, "w_pawn")
+wp4 = PawnW(square_coordinates[6][3], "white_pawn.png", squareW, "w_pawn")
+wp5 = PawnW(square_coordinates[6][4], "white_pawn.png", squareW, "w_pawn")
+wp6 = PawnW(square_coordinates[6][5], "white_pawn.png", squareW, "w_pawn")
+wp7 = PawnW(square_coordinates[6][6], "white_pawn.png", squareW, "w_pawn")
+wp8 = PawnW(square_coordinates[6][7], "white_pawn.png", squareW, "w_pawn")
+
 b_pawns = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8]
-figures = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8]
+figures = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8,
+           wp1, wp2, wp3, wp4, wp5, wp6, wp7, wp8]
 
 
 
 done = False
 dragging = False
+turn = 'w'
 
 def start_states(states, coords, figures, len):
     for obj in figures:
@@ -171,8 +218,8 @@ while not done:
             if e.button == 1:
                 index_set = pressed_square(mouse_x, mouse_y, square_coordinates, squareW[0], fieldX, fieldY)
                 print(index_set)
-                for obj in b_pawns:
-                    if collision(mouse_x, mouse_y, obj.x, obj.y, squareW[0]):
+                for obj in figures:
+                    if collision(mouse_x, mouse_y, obj.x, obj.y, squareW[0]) and obj.is_my_turn(turn):
                         dragging = True
                         obj.x = mouse_x - squareW[0] // 2
                         obj.y = mouse_y - squareW[0] // 2
@@ -197,8 +244,11 @@ while not done:
                                 dragging_object.x = x[0]
                                 dragging_object.y = x[1]
                                 square_states[row_n][x_n] = dragging_object.name
+                                if change_turn(dragging_object):
+                                    turn = 'b'
+                                else:
+                                    turn = 'w'
                             else:
-                                print(index_set)
                                 dragging_object.return_to_native(index_set, square_coordinates)
                     x_n += 1
                 x_n = 0
@@ -217,7 +267,8 @@ while not done:
     # Цвет и отрисовка
     gameDisplay.fill(fancyBlue)
     field(fieldX, fieldY)
-    for obj in b_pawns:
+    display_turn(turn, white)
+    for obj in figures:
         obj.render()
     pygame.display.update()
     clock.tick(60)
