@@ -19,9 +19,11 @@ class Figure:
         self.x = squares_coords[index_x][index_y][0]
         self.y = squares_coords[index_x][index_y][1]
 
-    def dragging(self, mouse_x, mouse_y, offset_x, offset_y):
+    def dragging(self, mouse_x, mouse_y, offset_x, offset_y, fieldX, fieldY, fieldSize):
         self.x = mouse_x + offset_x
         self.y = mouse_y + offset_y
+        if mouse_x < fieldX or mouse_x > fieldX + fieldSize[0] or mouse_y < fieldY or mouse_y > fieldY + fieldSize[0]:
+            return False
 
     def is_my_turn(self, turn):
         if self.name[0] == turn:
@@ -90,10 +92,20 @@ def display_turn(turn, color):
         gameDisplay.blit(textsurface, (0,0))
 
 
+def print_text(text, coords, color):
+    textsurface = myfont.render(text, False, color)
+    gameDisplay.blit(textsurface, coords)
+
 def change_turn(obj):
     if obj.name[0] == 'w':
         return True
     elif obj.name[0] == 'b':
+        return False
+
+def off_screen(mouse_x, mouse_y, fieldX, fieldY, fieldSize):
+    if mouse_x < fieldX or mouse_x > fieldX + fieldSize or mouse_y < fieldY or mouse_y > fieldY + fieldSize:
+        return True
+    else:
         return False
 
 
@@ -258,7 +270,10 @@ while not done:
                 #print(rx)
         elif e.type == pygame.MOUSEMOTION:
             if dragging:
-                dragging_object.dragging(mouse_x, mouse_y, offset_x, offset_y)
+                if off_screen(mouse_x, mouse_y, fieldX, fieldY, fieldSize[0]):
+                    dragging_object.return_to_native(index_set, square_coordinates)
+                else:
+                    dragging_object.dragging(mouse_x, mouse_y, offset_x, offset_y, fieldX, fieldY, fieldSize)
 
 
 
@@ -270,6 +285,7 @@ while not done:
     display_turn(turn, white)
     for obj in figures:
         obj.render()
+
     pygame.display.update()
     clock.tick(60)
 
