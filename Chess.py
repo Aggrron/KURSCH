@@ -35,7 +35,13 @@ class Figure:
 
 class PawnB(Figure):
     def correct_move(self, native_square_index, attacked_square_index):
-        if attacked_square_index[0] - native_square_index[0] == 1:
+        if attacked_square_index[0] - native_square_index[0] == 1 and attacked_square_index[1] == native_square_index[1] and not square_is_busy(square_states, attacked_square_index):
+            return True
+        elif native_square_index[0] == 1 and attacked_square_index[1] == native_square_index[1] and attacked_square_index[0]-native_square_index[0]==2 and not square_is_busy(square_states, attacked_square_index):
+            return True
+        elif attacked_square_index[0] - native_square_index[0] == 1 and attacked_square_index[1] - native_square_index[1] == 1 and square_states[attacked_square_index[0]][attacked_square_index[1]][0] == 'w':
+            return True
+        elif attacked_square_index[0] - native_square_index[0] == 1 and native_square_index[1] - attacked_square_index[1] == 1 and square_states[attacked_square_index[0]][attacked_square_index[1]][0] == 'w':
             return True
         else:
             return False
@@ -43,7 +49,13 @@ class PawnB(Figure):
 
 class PawnW(Figure):
     def correct_move(self, native_square_index, attacked_square_index):
-        if native_square_index[0] - attacked_square_index[0] == 1:
+        if native_square_index[0] - attacked_square_index[0] == 1 and attacked_square_index[1] == native_square_index[1] and not square_is_busy(square_states, attacked_square_index):
+            return True
+        elif native_square_index[0] == 6 and attacked_square_index[1] == native_square_index[1] and native_square_index[0] - attacked_square_index[0] == 2 and not square_is_busy(square_states, attacked_square_index):
+            return True
+        elif native_square_index[0] - attacked_square_index[0] == 1 and native_square_index[1] - attacked_square_index[1] == 1 and square_states[attacked_square_index[0]][attacked_square_index[1]][0] == 'b':
+            return True
+        elif native_square_index[0] - attacked_square_index[0] == 1 and attacked_square_index[1] - native_square_index[1] == 1 and square_states[attacked_square_index[0]][attacked_square_index[1]][0] == 'b':
             return True
         else:
             return False
@@ -87,7 +99,7 @@ def display_turn(turn, color):
     if turn[0] == 'w':
         textsurface = myfont.render('White turn', False, color)
         gameDisplay.blit(textsurface, (0, 0))
-    if turn[0] =='b':
+    if turn[0] == 'b':
         textsurface = myfont.render('Black turn', False, color)
         gameDisplay.blit(textsurface, (0,0))
 
@@ -107,6 +119,28 @@ def off_screen(mouse_x, mouse_y, fieldX, fieldY, fieldSize):
         return True
     else:
         return False
+
+# def attacked(figures, nsi, asi, square_coords, states):
+#     attacked_x = square_coords[asi[0]][asi[1]][0]
+#     attacked_y = square_coords[asi[0]][asi[1]][1]
+#     attacker_color = states[nsi[0]][nsi[1]][0]
+#     #defender_color = obj.name[0]
+#     for obj in figures:
+#         if obj.x == attacked_x and obj.y == attacked_y:
+#             if attacker_color == 'w' and obj.name[0] == 'b':
+#                 figures.remove(obj)
+#             elif attacker_color == 'b' and obj.name[0] == 'w':
+#                 figures.remove(obj)
+
+
+
+
+def square_is_busy(square_states, index_set):
+    if square_states[index_set[0]][index_set[1]] is not 'None':
+        return True
+    else:
+        return False
+
 
 
 pygame.init()
@@ -225,6 +259,12 @@ while not done:
 # - - - - -  Отслеживание инпута мыши - - - - -
         # Нажатие конпки мыши
         elif e.type == pygame.MOUSEBUTTONDOWN:
+            # if e.button == 3:
+            #     index_set = pressed_square(mouse_x, mouse_y, square_coordinates, squareW[0], fieldX, fieldY)
+            #     for obj in figures:
+            #         if collision(mouse_x, mouse_y, obj.x, obj.y, squareW[0]):
+            #             attacked(figures, obj, square_states, index_set)
+
             dragging_object = None
             # Передвижние фигур мышкой
             if e.button == 1:
@@ -238,13 +278,14 @@ while not done:
                         offset_x = obj.x - mouse_x
                         offset_y = obj.y - mouse_y
                         #index_set = pressed_square(mouse_x, mouse_y, square_coordinates, squareW[0], fieldX, fieldY)
-                        square_states[index_set[0]][index_set[1]] = "None"
+                        #square_states[index_set[0]][index_set[1]] = "None"
                         dragging_object = obj
         # Отжатие кнопки мыши
         elif e.type == pygame.MOUSEBUTTONUP:
             if e.button == 1:
                 index_set_up = pressed_square(mouse_x, mouse_y, square_coordinates, squareW[0], fieldX, fieldY)
                 dragging = False
+
             # Привязка фигур к квадратам
             row_n = 0  # Вспомогательный кал для другого массива статуса квадратов, лучше ничего не придумал
             x_n = 0
@@ -253,9 +294,14 @@ while not done:
                     if dragging_object is not None:
                         if collision(dragging_object.x + squareW[0] // 2, dragging_object.y + squareW[0] // 2, x[0], x[1], squareW[0]):
                             if dragging_object.correct_move(index_set, index_set_up):
+                                for obj in figures:
+                                    if obj.x == square_coordinates[index_set_up[0]][index_set_up[1]][0] and obj.y == \
+                                            square_coordinates[index_set_up[0]][index_set_up[1]][1] and dragging_object.name[0] != obj.name[0]:
+                                        figures.remove(obj)
                                 dragging_object.x = x[0]
                                 dragging_object.y = x[1]
                                 square_states[row_n][x_n] = dragging_object.name
+                                square_states[index_set[0]][index_set[1]] = "None"
                                 if change_turn(dragging_object):
                                     turn = 'b'
                                 else:
@@ -266,8 +312,8 @@ while not done:
                 x_n = 0
                 row_n += 1
             row_n = 0
-            #for rx in square_states:
-                #print(rx)
+            for rx in square_states:
+                print(rx)
         elif e.type == pygame.MOUSEMOTION:
             if dragging:
                 if off_screen(mouse_x, mouse_y, fieldX, fieldY, fieldSize[0]):
