@@ -61,6 +61,27 @@ class PawnW(Figure):
             return False
 
 
+class RookW(Figure):
+    def correct_move(self, native_square_index, attacked_square_index):
+        nsi = native_square_index
+        asi = attacked_square_index
+        if native_square_index == attacked_square_index:
+            return False
+        if native_square_index[0] == attacked_square_index[0] and not sm_is_on_th_way_rook(nsi, asi, states):
+            return True
+        elif native_square_index[1] == attacked_square_index[1] and not sm_is_on_th_way_rook(nsi, asi, states):
+            return True
+        else:
+            return False
+
+
+class RookB(Figure):
+    def correct_move(self, native_square_index, attacked_square_index):
+        if native_square_index == attacked_square_index:
+            return False
+        else:
+            return True
+
 
 
 
@@ -93,6 +114,24 @@ def pressed_square(mouse_x, mouse_y, square_coordinates, squareW, fieldX, fieldY
     else:
         result = (-1, -1)
         return result
+
+def sm_is_on_th_way_rook(nsi, asi, states):
+    y_st = nsi[0]
+    x_st = nsi[1]
+    y_en = asi[0]
+    x_en = asi[1]
+    da_way_is_blocked = False
+    if nsi[0] == asi[0]:
+        if x_st+1 < x_en:
+            for i in range(x_st+1, x_en):
+                print(y_st, i)
+                if states[y_st][i] != 'None':
+                    da_way_is_blocked = True
+        if x_st+1 > x_en:
+            for i in range(x_en, x_st)
+
+    if nsi[1] == asi[1]:
+        for i in range()
 
 
 def display_turn(turn, color):
@@ -214,6 +253,9 @@ bp6 = PawnB(square_coordinates[1][5], "black_pawn.png", squareW, "b_pawn")
 bp7 = PawnB(square_coordinates[1][6], "black_pawn.png", squareW, "b_pawn")
 bp8 = PawnB(square_coordinates[1][7], "black_pawn.png", squareW, "b_pawn")
 
+br1 = RookB(square_coordinates[0][0], "black_rook.png", squareW, "b_rook")
+br2 = RookB(square_coordinates[0][7], "black_rook.png", squareW, "b_rook")
+
 wp1 = PawnW(square_coordinates[6][0], "white_pawn.png", squareW, "w_pawn")
 wp2 = PawnW(square_coordinates[6][1], "white_pawn.png", squareW, "w_pawn")
 wp3 = PawnW(square_coordinates[6][2], "white_pawn.png", squareW, "w_pawn")
@@ -223,9 +265,13 @@ wp6 = PawnW(square_coordinates[6][5], "white_pawn.png", squareW, "w_pawn")
 wp7 = PawnW(square_coordinates[6][6], "white_pawn.png", squareW, "w_pawn")
 wp8 = PawnW(square_coordinates[6][7], "white_pawn.png", squareW, "w_pawn")
 
+wr1 = RookW(square_coordinates[7][0], "white_rook.png", squareW, "w_rook")
+wr2 = RookW(square_coordinates[7][7], "white_rook.png", squareW, "w_rook")
+
 b_pawns = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8]
 figures = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8,
-           wp1, wp2, wp3, wp4, wp5, wp6, wp7, wp8]
+           wp1, wp2, wp3, wp4, wp5, wp6, wp7, wp8,
+           wr1, wr2, br1, br2]
 
 
 
@@ -312,8 +358,8 @@ while not done:
                 x_n = 0
                 row_n += 1
             row_n = 0
-            for rx in square_states:
-                print(rx)
+            # for rx in square_states:
+            #     print(rx)
         elif e.type == pygame.MOUSEMOTION:
             if dragging:
                 if off_screen(mouse_x, mouse_y, fieldX, fieldY, fieldSize[0]):
