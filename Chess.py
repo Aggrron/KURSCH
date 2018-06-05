@@ -65,11 +65,11 @@ class RookW(Figure):
     def correct_move(self, native_square_index, attacked_square_index):
         nsi = native_square_index
         asi = attacked_square_index
-        if native_square_index == attacked_square_index:
+        if native_square_index == attacked_square_index or square_states[asi[0]][asi[1]][0]== 'w':
             return False
-        if native_square_index[0] == attacked_square_index[0] and not sm_is_on_th_way_rook(nsi, asi, states):
+        if native_square_index[0] == attacked_square_index[0] and not sm_is_on_th_way_rook(nsi, asi, square_states):
             return True
-        elif native_square_index[1] == attacked_square_index[1] and not sm_is_on_th_way_rook(nsi, asi, states):
+        elif native_square_index[1] == attacked_square_index[1] and not sm_is_on_th_way_rook(nsi, asi, square_states):
             return True
         else:
             return False
@@ -77,10 +77,16 @@ class RookW(Figure):
 
 class RookB(Figure):
     def correct_move(self, native_square_index, attacked_square_index):
-        if native_square_index == attacked_square_index:
+        nsi = native_square_index
+        asi = attacked_square_index
+        if nsi == asi or square_states[asi[0]][asi[1]][0] == 'b':
             return False
-        else:
+        if nsi[0] == asi[0] and not sm_is_on_th_way_rook(nsi, asi, square_states):
             return True
+        elif nsi[1] == asi[1] and not sm_is_on_th_way_rook(nsi, asi, square_states):
+            return True
+        else:
+            return False
 
 
 
@@ -124,14 +130,23 @@ def sm_is_on_th_way_rook(nsi, asi, states):
     if nsi[0] == asi[0]:
         if x_st+1 < x_en:
             for i in range(x_st+1, x_en):
-                print(y_st, i)
                 if states[y_st][i] != 'None':
                     da_way_is_blocked = True
-        if x_st+1 > x_en:
-            for i in range(x_en, x_st)
-
+        if x_st-1 > x_en:
+            for i in range(x_en+1, x_st):
+                if states[y_st][i] != 'None':
+                    da_way_is_blocked = True
     if nsi[1] == asi[1]:
-        for i in range()
+        if y_st-1 > y_en:
+            for i in range(y_en+1, y_st):
+                if states[i][x_st] != 'None':
+                    da_way_is_blocked = True
+        if y_st+1 < y_en:
+            for i in range(y_st+1, y_en):
+                if states[i][x_st] != 'None':
+                    da_way_is_blocked = True
+    return da_way_is_blocked
+
 
 
 def display_turn(turn, color):
