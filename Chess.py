@@ -89,6 +89,15 @@ class RookB(Figure):
             return False
 
 
+class BishopW(Figure):
+    def correct_move(self, nsi, asi):
+        return True
+
+
+class BishopB(Figure):
+    def correct_move(self, nsi, asi):
+        return True
+
 
 
 
@@ -271,6 +280,9 @@ bp8 = PawnB(square_coordinates[1][7], "black_pawn.png", squareW, "b_pawn")
 br1 = RookB(square_coordinates[0][0], "black_rook.png", squareW, "b_rook")
 br2 = RookB(square_coordinates[0][7], "black_rook.png", squareW, "b_rook")
 
+bb1 = BishopB(square_coordinates[0][2], "black_bishop.png", squareW, "b_bishop")
+bb2 = BishopB(square_coordinates[0][5], "black_bishop.png", squareW, "b_bishop")
+
 wp1 = PawnW(square_coordinates[6][0], "white_pawn.png", squareW, "w_pawn")
 wp2 = PawnW(square_coordinates[6][1], "white_pawn.png", squareW, "w_pawn")
 wp3 = PawnW(square_coordinates[6][2], "white_pawn.png", squareW, "w_pawn")
@@ -283,10 +295,14 @@ wp8 = PawnW(square_coordinates[6][7], "white_pawn.png", squareW, "w_pawn")
 wr1 = RookW(square_coordinates[7][0], "white_rook.png", squareW, "w_rook")
 wr2 = RookW(square_coordinates[7][7], "white_rook.png", squareW, "w_rook")
 
+wb1 = BishopW(square_coordinates[7][2], "white_bishop.png", squareW, "w_bishop")
+wb2 = BishopW(square_coordinates[7][5], "white_bishop.png", squareW, "w_bishop")
+
 b_pawns = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8]
 figures = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8,
            wp1, wp2, wp3, wp4, wp5, wp6, wp7, wp8,
-           wr1, wr2, br1, br2]
+           wr1, wr2, br1, br2,
+           wb1, wb2, bb1, bb2]
 
 
 
