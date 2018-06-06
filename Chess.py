@@ -89,22 +89,40 @@ class RookB(Figure):
             return False
 
 
-class BishopW(Figure):
+class Bishop(Figure):
     def correct_move(self, nsi, asi):
-        if nsi[0] > asi[0]:
-            diff_1 = nsi[0] - asi[0]
-            if nsi[1] - asi[1] == diff_1:
+        y_st = nsi[0]
+        y_en = asi[0]
+        x_st = nsi[1]
+        x_en = asi[1]
+        if square_states[asi[0]][asi[1]][0] == 'w' and square_states[nsi[0]][nsi[1]][0] == 'w':
+            return False
+        if square_states[asi[0]][asi[1]][0] == 'b' and square_states[nsi[0]][nsi[1]][0] == 'b':
+            return False
+        if nsi == asi:
+            return False
+        if y_st > y_en and x_st > x_en:
+            diff_1 = y_st - y_en
+            diff_2 = x_st - x_en
+            if diff_1 == diff_2 and not sm_is_on_th_way_bishop(nsi, asi, square_states):
                 return True
-        elif asi[0] > nsi[0]:
-            diff_1 = asi[0] - nsi[0]
-            if asi[1] - nsi[1] == diff_1:
+        elif y_st < y_en and x_st > x_en:
+            diff_1 = y_en - y_st
+            diff_2 = x_st - x_en
+            if diff_1 == diff_2 and not sm_is_on_th_way_bishop(nsi, asi, square_states):
                 return True
-        return False
+        elif y_st > y_en and x_st < x_en:
+            diff_1 = y_st - y_en
+            diff_2 = x_en - x_st
+            if diff_1 == diff_2 and not sm_is_on_th_way_bishop(nsi, asi, square_states):
+                return True
+        elif y_st < y_en and x_st < x_en:
+            diff_1 = y_en - y_st
+            diff_2 = x_en - x_st
+            if diff_1 == diff_2 and not sm_is_on_th_way_bishop(nsi, asi, square_states):
+                return True
 
 
-class BishopB(Figure):
-    def correct_move(self, nsi, asi):
-        return True
 
 
 
@@ -138,8 +156,47 @@ def pressed_square(mouse_x, mouse_y, square_coordinates, squareW, fieldX, fieldY
         result = (-1, -1)
         return result
 
-def sm_is_ob_th_way_bishop(nsi, asi, states):
-    pass
+def sm_is_on_th_way_bishop(nsi, asi, states):
+    y_st = nsi[0]
+    y_en = asi[0]
+    x_st = nsi[1]
+    x_en = asi[1]
+    da_way_is_blocked = False
+    if y_st > y_en and x_st > x_en:
+        row_x = x_en + 1
+        for i in range(y_en+1, y_st):
+            print(i, row_x)
+            if states[i][row_x] != 'None':
+                da_way_is_blocked = True
+                print((i, row_x), "is busy")
+                break
+            row_x += 1
+    if y_st < y_en and x_st > x_en:
+        row_x = x_st-1
+        for i in range(y_st+1, y_en):
+            if states[i][row_x] != 'None':
+                da_way_is_blocked = True
+                print((i, row_x), "is busy")
+                break
+            row_x -= 1
+    if y_st > y_en and x_st < x_en:
+        row_x = x_en - 1
+        for i in range(y_en+1, y_st):
+            if states[i][row_x] != 'None':
+                da_way_is_blocked = True
+                print((i, row_x), "is busy")
+                break
+            row_x -= 1
+    if y_st < y_en and x_st < x_en:
+        row_x = x_st + 1
+        for i in range(y_st+1, y_en):
+            if states[i][row_x] != 'None':
+                da_way_is_blocked = True
+                print((i, row_x), "is busy")
+                break
+            row_x += 1
+    return da_way_is_blocked
+
 
 def sm_is_on_th_way_rook(nsi, asi, states):
     y_st = nsi[0]
@@ -291,8 +348,8 @@ bp8 = PawnB(square_coordinates[1][7], "black_pawn.png", squareW, "b_pawn")
 br1 = RookB(square_coordinates[0][0], "black_rook.png", squareW, "b_rook")
 br2 = RookB(square_coordinates[0][7], "black_rook.png", squareW, "b_rook")
 
-bb1 = BishopB(square_coordinates[0][2], "black_bishop.png", squareW, "b_bishop")
-bb2 = BishopB(square_coordinates[0][5], "black_bishop.png", squareW, "b_bishop")
+bb1 = Bishop(square_coordinates[0][2], "black_bishop.png", squareW, "b_bishop")
+bb2 = Bishop(square_coordinates[0][5], "black_bishop.png", squareW, "b_bishop")
 
 wp1 = PawnW(square_coordinates[6][0], "white_pawn.png", squareW, "w_pawn")
 wp2 = PawnW(square_coordinates[6][1], "white_pawn.png", squareW, "w_pawn")
@@ -306,8 +363,8 @@ wp8 = PawnW(square_coordinates[6][7], "white_pawn.png", squareW, "w_pawn")
 wr1 = RookW(square_coordinates[7][0], "white_rook.png", squareW, "w_rook")
 wr2 = RookW(square_coordinates[7][7], "white_rook.png", squareW, "w_rook")
 
-wb1 = BishopW(square_coordinates[4][3], "white_bishop.png", squareW, "w_bishop")
-wb2 = BishopW(square_coordinates[7][5], "white_bishop.png", squareW, "w_bishop")
+wb1 = Bishop(square_coordinates[4][3], "white_bishop.png", squareW, "w_bishop")
+wb2 = Bishop(square_coordinates[7][5], "white_bishop.png", squareW, "w_bishop")
 
 b_pawns = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8]
 figures = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8,
