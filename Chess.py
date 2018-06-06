@@ -91,7 +91,15 @@ class RookB(Figure):
 
 class BishopW(Figure):
     def correct_move(self, nsi, asi):
-        return True
+        if nsi[0] > asi[0]:
+            diff_1 = nsi[0] - asi[0]
+            if nsi[1] - asi[1] == diff_1:
+                return True
+        elif asi[0] > nsi[0]:
+            diff_1 = asi[0] - nsi[0]
+            if asi[1] - nsi[1] == diff_1:
+                return True
+        return False
 
 
 class BishopB(Figure):
@@ -129,6 +137,9 @@ def pressed_square(mouse_x, mouse_y, square_coordinates, squareW, fieldX, fieldY
     else:
         result = (-1, -1)
         return result
+
+def sm_is_ob_th_way_bishop(nsi, asi, states):
+    pass
 
 def sm_is_on_th_way_rook(nsi, asi, states):
     y_st = nsi[0]
@@ -295,7 +306,7 @@ wp8 = PawnW(square_coordinates[6][7], "white_pawn.png", squareW, "w_pawn")
 wr1 = RookW(square_coordinates[7][0], "white_rook.png", squareW, "w_rook")
 wr2 = RookW(square_coordinates[7][7], "white_rook.png", squareW, "w_rook")
 
-wb1 = BishopW(square_coordinates[7][2], "white_bishop.png", squareW, "w_bishop")
+wb1 = BishopW(square_coordinates[4][3], "white_bishop.png", squareW, "w_bishop")
 wb2 = BishopW(square_coordinates[7][5], "white_bishop.png", squareW, "w_bishop")
 
 b_pawns = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8]
