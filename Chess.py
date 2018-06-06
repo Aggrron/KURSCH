@@ -123,6 +123,10 @@ class Bishop(Figure):
                 return True
 
 
+class Knight(Figure):
+    def correct_move(self, nsi, asi):
+        return True
+
 
 
 
@@ -351,6 +355,9 @@ br2 = RookB(square_coordinates[0][7], "black_rook.png", squareW, "b_rook")
 bb1 = Bishop(square_coordinates[0][2], "black_bishop.png", squareW, "b_bishop")
 bb2 = Bishop(square_coordinates[0][5], "black_bishop.png", squareW, "b_bishop")
 
+bk1 = Knight(square_coordinates[0][1], "black_knight.png", squareW, "b_knight")
+bk2 = Knight(square_coordinates[0][6], "black_knight.png", squareW, "b_knight")
+
 wp1 = PawnW(square_coordinates[6][0], "white_pawn.png", squareW, "w_pawn")
 wp2 = PawnW(square_coordinates[6][1], "white_pawn.png", squareW, "w_pawn")
 wp3 = PawnW(square_coordinates[6][2], "white_pawn.png", squareW, "w_pawn")
@@ -366,11 +373,15 @@ wr2 = RookW(square_coordinates[7][7], "white_rook.png", squareW, "w_rook")
 wb1 = Bishop(square_coordinates[4][3], "white_bishop.png", squareW, "w_bishop")
 wb2 = Bishop(square_coordinates[7][5], "white_bishop.png", squareW, "w_bishop")
 
+wk1 = Knight(square_coordinates[7][1], "white_knight.png", squareW, "w_knight")
+wk2 = Knight(square_coordinates[7][6], "white_knight.png", squareW, "w_knight")
+
 b_pawns = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8]
 figures = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8,
            wp1, wp2, wp3, wp4, wp5, wp6, wp7, wp8,
            wr1, wr2, br1, br2,
-           wb1, wb2, bb1, bb2]
+           wb1, wb2, bb1, bb2,
+           wk1, wk2, bk1, bk2]
 
 
 
@@ -478,7 +489,7 @@ while not done:
         obj.render()
 
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(120)
 
 pygame.quit()
 quit()
