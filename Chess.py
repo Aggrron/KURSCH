@@ -36,6 +36,9 @@ class Figure:
 
 class PawnB(Figure):
     def correct_move(self, native_square_index, attacked_square_index):
+        asi = attacked_square_index
+        if square_states[asi[0]][asi[1]][2:] == 'king':
+            return False
         if attacked_square_index[0] - native_square_index[0] == 1 and attacked_square_index[1] == native_square_index[1] and not square_is_busy(square_states, attacked_square_index):
             return True
         elif native_square_index[0] == 1 and attacked_square_index[1] == native_square_index[1] and attacked_square_index[0]-native_square_index[0]==2 and not square_is_busy(square_states, attacked_square_index):
@@ -50,6 +53,9 @@ class PawnB(Figure):
 
 class PawnW(Figure):
     def correct_move(self, native_square_index, attacked_square_index):
+        asi = attacked_square_index
+        if square_states[asi[0]][asi[1]][2:] == 'king':
+            return False
         if native_square_index[0] - attacked_square_index[0] == 1 and attacked_square_index[1] == native_square_index[1] and not square_is_busy(square_states, attacked_square_index):
             return True
         elif native_square_index[0] == 6 and attacked_square_index[1] == native_square_index[1] and native_square_index[0] - attacked_square_index[0] == 2 and not square_is_busy(square_states, attacked_square_index):
@@ -66,6 +72,8 @@ class RookW(Figure):
     def correct_move(self, native_square_index, attacked_square_index):
         nsi = native_square_index
         asi = attacked_square_index
+        if square_states[asi[0]][asi[1]][2:] == 'king':
+            return False
         if native_square_index == attacked_square_index or square_states[asi[0]][asi[1]][0]== 'w':
             return False
         if native_square_index[0] == attacked_square_index[0] and not sm_is_on_th_way_rook(nsi, asi, square_states):
@@ -80,6 +88,8 @@ class RookB(Figure):
     def correct_move(self, native_square_index, attacked_square_index):
         nsi = native_square_index
         asi = attacked_square_index
+        if square_states[asi[0]][asi[1]][2:] == 'king':
+            return False
         if nsi == asi or square_states[asi[0]][asi[1]][0] == 'b':
             return False
         if nsi[0] == asi[0] and not sm_is_on_th_way_rook(nsi, asi, square_states):
@@ -96,6 +106,8 @@ class Bishop(Figure):
         y_en = asi[0]
         x_st = nsi[1]
         x_en = asi[1]
+        if square_states[asi[0]][asi[1]][2:] == 'king':
+            return False
         if square_states[asi[0]][asi[1]][0] == 'w' and square_states[nsi[0]][nsi[1]][0] == 'w':
             return False
         if square_states[asi[0]][asi[1]][0] == 'b' and square_states[nsi[0]][nsi[1]][0] == 'b':
@@ -132,6 +144,8 @@ class Knight(Figure):
         x_en = asi[1]
         diff_1 = math.fabs(y_st-y_en)
         diff_2 = math.fabs(x_st-x_en)
+        if square_states[asi[0]][asi[1]][2:] == 'king':
+            return False
         if nsi == asi:
             return False
         if square_states[nsi[0]][nsi[1]][0] == 'w' and square_states[asi[0]][asi[1]][0] == 'w':
@@ -150,6 +164,8 @@ class Queen(Figure):
         x_st = nsi[1]
         x_en = asi[1]
         if nsi == asi:
+            return False
+        if square_states[asi[0]][asi[1]][2:] == 'king':
             return False
         if square_states[nsi[0]][nsi[1]][0] == 'w' and square_states[asi[0]][asi[1]][0] == 'w':
             return False
@@ -193,6 +209,8 @@ class King(Figure):
         x_en = asi[1]
         diff_1 = math.fabs(y_st - y_en)
         diff_2 = math.fabs(x_st - x_en)
+        if square_states[asi[0]][asi[1]][2:] == 'king':
+            return False
         if nsi == asi:
             return False
         elif diff_1 == 1 and diff_2 == 1:
@@ -234,6 +252,9 @@ def pressed_square(mouse_x, mouse_y, square_coordinates, squareW, fieldX, fieldY
     else:
         result = (-1, -1)
         return result
+
+def check(turn, states):
+    pass
 
 def sm_is_on_th_way_bishop(nsi, asi, states):
     y_st = nsi[0]
@@ -455,7 +476,7 @@ wk1 = Knight(square_coordinates[7][1], "white_knight.png", squareW, "w_knight")
 wk2 = Knight(square_coordinates[7][6], "white_knight.png", squareW, "w_knight")
 
 wq1 = Queen(square_coordinates[7][3], "white_queen.png", squareW, "w_queen")
-wK1 = King(square_coordinates[4][3], "white_king.png", squareW, "w_king")
+wK1 = King(square_coordinates[7][4], "white_king.png", squareW, "w_king")
 
 b_pawns = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8]
 figures = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8,
