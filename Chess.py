@@ -187,7 +187,22 @@ class Queen(Figure):
 
 class King(Figure):
     def correct_move(self, nsi, asi):
-        return True
+        y_st = nsi[0]
+        y_en = asi[0]
+        x_st = nsi[1]
+        x_en = asi[1]
+        diff_1 = math.fabs(y_st - y_en)
+        diff_2 = math.fabs(x_st - x_en)
+        if nsi == asi:
+            return False
+        elif diff_1 == 1 and diff_2 == 1:
+            return True
+        elif diff_1 == 1 and diff_2 == 0:
+            return True
+        elif diff_2 == 1 and diff_1 == 0:
+            return True
+        else:
+            return False
 
 
 
@@ -419,6 +434,7 @@ bk1 = Knight(square_coordinates[0][1], "black_knight.png", squareW, "b_knight")
 bk2 = Knight(square_coordinates[0][6], "black_knight.png", squareW, "b_knight")
 
 bq1 = Queen(square_coordinates[0][4], "black_queen.png", squareW, "b_queen")
+bK1 = King(square_coordinates[0][3], "black_king.png", squareW, "b_king")
 
 wp1 = PawnW(square_coordinates[6][0], "white_pawn.png", squareW, "w_pawn")
 wp2 = PawnW(square_coordinates[6][1], "white_pawn.png", squareW, "w_pawn")
@@ -439,6 +455,7 @@ wk1 = Knight(square_coordinates[7][1], "white_knight.png", squareW, "w_knight")
 wk2 = Knight(square_coordinates[7][6], "white_knight.png", squareW, "w_knight")
 
 wq1 = Queen(square_coordinates[7][3], "white_queen.png", squareW, "w_queen")
+wK1 = King(square_coordinates[4][3], "white_king.png", squareW, "w_king")
 
 b_pawns = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8]
 figures = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8,
@@ -446,7 +463,7 @@ figures = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8,
            wr1, wr2, br1, br2,
            wb1, wb2, bb1, bb2,
            wk1, wk2, bk1, bk2,
-           wq1, bq1]
+           wq1, bq1, wK1, bK1]
 
 
 
