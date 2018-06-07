@@ -1,4 +1,5 @@
 import pygame
+import math
 
 class Figure:
     def __init__(self, coords, filename, squareW, name):
@@ -125,7 +126,22 @@ class Bishop(Figure):
 
 class Knight(Figure):
     def correct_move(self, nsi, asi):
-        return True
+        y_st = nsi[0]
+        y_en = asi[0]
+        x_st = nsi[1]
+        x_en = asi[1]
+        diff_1 = math.fabs(y_st-y_en)
+        diff_2 = math.fabs(x_st-x_en)
+        if nsi == asi:
+            return False
+        if square_states[nsi[0]][nsi[1]][0] == 'w' and square_states[asi[0]][asi[1]][0] == 'w':
+            return False
+        if square_states[nsi[0]][nsi[1]][0] == 'b' and square_states[asi[0]][asi[1]][0] == 'b':
+            return False
+        elif diff_1 == 2 and diff_2 == 1 or diff_2 == 2 and diff_1 == 1:
+            return True
+        else:
+            return False
 
 
 
@@ -370,7 +386,7 @@ wp8 = PawnW(square_coordinates[6][7], "white_pawn.png", squareW, "w_pawn")
 wr1 = RookW(square_coordinates[7][0], "white_rook.png", squareW, "w_rook")
 wr2 = RookW(square_coordinates[7][7], "white_rook.png", squareW, "w_rook")
 
-wb1 = Bishop(square_coordinates[4][3], "white_bishop.png", squareW, "w_bishop")
+wb1 = Bishop(square_coordinates[7][2], "white_bishop.png", squareW, "w_bishop")
 wb2 = Bishop(square_coordinates[7][5], "white_bishop.png", squareW, "w_bishop")
 
 wk1 = Knight(square_coordinates[7][1], "white_knight.png", squareW, "w_knight")
