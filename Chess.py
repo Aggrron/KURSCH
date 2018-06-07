@@ -143,7 +143,51 @@ class Knight(Figure):
         else:
             return False
 
+class Queen(Figure):
+    def correct_move(self, nsi, asi):
+        y_st = nsi[0]
+        y_en = asi[0]
+        x_st = nsi[1]
+        x_en = asi[1]
+        if nsi == asi:
+            return False
+        if square_states[nsi[0]][nsi[1]][0] == 'w' and square_states[asi[0]][asi[1]][0] == 'w':
+            return False
+        if square_states[nsi[0]][nsi[1]][0] == 'b' and square_states[asi[0]][asi[1]][0] == 'b':
+            return False
+        # - Поведение как у ладьи - -------------------------
+        elif y_st == y_en and not sm_is_on_th_way_rook(nsi, asi, square_states):
+            return True
+        elif x_st == x_en and not sm_is_on_th_way_rook(nsi, asi, square_states):
+            return True
+        # -Поведение как у слона ------------------------------------
+        elif y_st > y_en and x_st > x_en:
+            diff_1 = y_st - y_en
+            diff_2 = x_st - x_en
+            if diff_1 == diff_2 and not sm_is_on_th_way_bishop(nsi, asi, square_states):
+                return True
+        elif y_st < y_en and x_st > x_en:
+            diff_1 = y_en - y_st
+            diff_2 = x_st - x_en
+            if diff_1 == diff_2 and not sm_is_on_th_way_bishop(nsi, asi, square_states):
+                return True
+        elif y_st > y_en and x_st < x_en:
+            diff_1 = y_st - y_en
+            diff_2 = x_en - x_st
+            if diff_1 == diff_2 and not sm_is_on_th_way_bishop(nsi, asi, square_states):
+                return True
+        elif y_st < y_en and x_st < x_en:
+            diff_1 = y_en - y_st
+            diff_2 = x_en - x_st
+            if diff_1 == diff_2 and not sm_is_on_th_way_bishop(nsi, asi, square_states):
+                return True
+        else:
+            return False
 
+
+class King(Figure):
+    def correct_move(self, nsi, asi):
+        return True
 
 
 
@@ -374,6 +418,8 @@ bb2 = Bishop(square_coordinates[0][5], "black_bishop.png", squareW, "b_bishop")
 bk1 = Knight(square_coordinates[0][1], "black_knight.png", squareW, "b_knight")
 bk2 = Knight(square_coordinates[0][6], "black_knight.png", squareW, "b_knight")
 
+bq1 = Queen(square_coordinates[0][4], "black_queen.png", squareW, "b_queen")
+
 wp1 = PawnW(square_coordinates[6][0], "white_pawn.png", squareW, "w_pawn")
 wp2 = PawnW(square_coordinates[6][1], "white_pawn.png", squareW, "w_pawn")
 wp3 = PawnW(square_coordinates[6][2], "white_pawn.png", squareW, "w_pawn")
@@ -392,12 +438,15 @@ wb2 = Bishop(square_coordinates[7][5], "white_bishop.png", squareW, "w_bishop")
 wk1 = Knight(square_coordinates[7][1], "white_knight.png", squareW, "w_knight")
 wk2 = Knight(square_coordinates[7][6], "white_knight.png", squareW, "w_knight")
 
+wq1 = Queen(square_coordinates[7][3], "white_queen.png", squareW, "w_queen")
+
 b_pawns = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8]
 figures = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8,
            wp1, wp2, wp3, wp4, wp5, wp6, wp7, wp8,
            wr1, wr2, br1, br2,
            wb1, wb2, bb1, bb2,
-           wk1, wk2, bk1, bk2]
+           wk1, wk2, bk1, bk2,
+           wq1, bq1]
 
 
 
