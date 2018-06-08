@@ -37,8 +37,8 @@ class Figure:
 class PawnB(Figure):
     def correct_move(self, native_square_index, attacked_square_index):
         asi = attacked_square_index
-        if square_states[asi[0]][asi[1]][2:] == 'king':
-            return False
+        # if square_states[asi[0]][asi[1]][2:] == 'king':
+        #     return False
         if attacked_square_index[0] - native_square_index[0] == 1 and attacked_square_index[1] == native_square_index[1] and not square_is_busy(square_states, attacked_square_index):
             return True
         elif native_square_index[0] == 1 and attacked_square_index[1] == native_square_index[1] and attacked_square_index[0]-native_square_index[0]==2 and not square_is_busy(square_states, attacked_square_index):
@@ -54,8 +54,8 @@ class PawnB(Figure):
 class PawnW(Figure):
     def correct_move(self, native_square_index, attacked_square_index):
         asi = attacked_square_index
-        if square_states[asi[0]][asi[1]][2:] == 'king':
-            return False
+        # if square_states[asi[0]][asi[1]][2:] == 'king':
+        #     return False
         if native_square_index[0] - attacked_square_index[0] == 1 and attacked_square_index[1] == native_square_index[1] and not square_is_busy(square_states, attacked_square_index):
             return True
         elif native_square_index[0] == 6 and attacked_square_index[1] == native_square_index[1] and native_square_index[0] - attacked_square_index[0] == 2 and not square_is_busy(square_states, attacked_square_index):
@@ -72,8 +72,8 @@ class RookW(Figure):
     def correct_move(self, native_square_index, attacked_square_index):
         nsi = native_square_index
         asi = attacked_square_index
-        if square_states[asi[0]][asi[1]][2:] == 'king':
-            return False
+        # if square_states[asi[0]][asi[1]][2:] == 'king':
+        #     return False
         if native_square_index == attacked_square_index or square_states[asi[0]][asi[1]][0]== 'w':
             return False
         if native_square_index[0] == attacked_square_index[0] and not sm_is_on_th_way_rook(nsi, asi, square_states):
@@ -88,8 +88,8 @@ class RookB(Figure):
     def correct_move(self, native_square_index, attacked_square_index):
         nsi = native_square_index
         asi = attacked_square_index
-        if square_states[asi[0]][asi[1]][2:] == 'king':
-            return False
+        # if square_states[asi[0]][asi[1]][2:] == 'king':
+        #     return False
         if nsi == asi or square_states[asi[0]][asi[1]][0] == 'b':
             return False
         if nsi[0] == asi[0] and not sm_is_on_th_way_rook(nsi, asi, square_states):
@@ -106,8 +106,8 @@ class Bishop(Figure):
         y_en = asi[0]
         x_st = nsi[1]
         x_en = asi[1]
-        if square_states[asi[0]][asi[1]][2:] == 'king':
-            return False
+        # if square_states[asi[0]][asi[1]][2:] == 'king':
+        #     return False
         if square_states[asi[0]][asi[1]][0] == 'w' and square_states[nsi[0]][nsi[1]][0] == 'w':
             return False
         if square_states[asi[0]][asi[1]][0] == 'b' and square_states[nsi[0]][nsi[1]][0] == 'b':
@@ -144,8 +144,8 @@ class Knight(Figure):
         x_en = asi[1]
         diff_1 = math.fabs(y_st-y_en)
         diff_2 = math.fabs(x_st-x_en)
-        if square_states[asi[0]][asi[1]][2:] == 'king':
-            return False
+        # if square_states[asi[0]][asi[1]][2:] == 'king':
+        #     return False
         if nsi == asi:
             return False
         if square_states[nsi[0]][nsi[1]][0] == 'w' and square_states[asi[0]][asi[1]][0] == 'w':
@@ -165,8 +165,8 @@ class Queen(Figure):
         x_en = asi[1]
         if nsi == asi:
             return False
-        if square_states[asi[0]][asi[1]][2:] == 'king':
-            return False
+        # if square_states[asi[0]][asi[1]][2:] == 'king':
+        #     return False
         if square_states[nsi[0]][nsi[1]][0] == 'w' and square_states[asi[0]][asi[1]][0] == 'w':
             return False
         if square_states[nsi[0]][nsi[1]][0] == 'b' and square_states[asi[0]][asi[1]][0] == 'b':
@@ -265,10 +265,10 @@ def sm_is_on_th_way_bishop(nsi, asi, states):
     if y_st > y_en and x_st > x_en:
         row_x = x_en + 1
         for i in range(y_en+1, y_st):
-            print(i, row_x)
+            #print(i, row_x)
             if states[i][row_x] != 'None':
                 da_way_is_blocked = True
-                print((i, row_x), "is busy")
+                #print((i, row_x), "is busy")
                 break
             row_x += 1
     if y_st < y_en and x_st > x_en:
@@ -276,7 +276,7 @@ def sm_is_on_th_way_bishop(nsi, asi, states):
         for i in range(y_st+1, y_en):
             if states[i][row_x] != 'None':
                 da_way_is_blocked = True
-                print((i, row_x), "is busy")
+                #print((i, row_x), "is busy")
                 break
             row_x -= 1
     if y_st > y_en and x_st < x_en:
@@ -284,7 +284,7 @@ def sm_is_on_th_way_bishop(nsi, asi, states):
         for i in range(y_en+1, y_st):
             if states[i][row_x] != 'None':
                 da_way_is_blocked = True
-                print((i, row_x), "is busy")
+                #print((i, row_x), "is busy")
                 break
             row_x -= 1
     if y_st < y_en and x_st < x_en:
@@ -292,7 +292,7 @@ def sm_is_on_th_way_bishop(nsi, asi, states):
         for i in range(y_st+1, y_en):
             if states[i][row_x] != 'None':
                 da_way_is_blocked = True
-                print((i, row_x), "is busy")
+                #print((i, row_x), "is busy")
                 break
             row_x += 1
     return da_way_is_blocked
@@ -323,6 +323,40 @@ def sm_is_on_th_way_rook(nsi, asi, states):
                 if states[i][x_st] != 'None':
                     da_way_is_blocked = True
     return da_way_is_blocked
+
+def check(states, white_figs, black_figs):
+    row_n = 0
+    x_n = 0
+    white_king_is_check = False
+    black_king_is_check = False
+    for row in states:
+        for x in row:
+            if x == 'w_king':
+                white_king_index = (row_n, x_n)
+            if x == 'b_king':
+                black_king_index = (row_n, x_n)
+            x_n += 1
+        x_n = 0
+        row_n += 1
+    for obj in black_figs:
+        object_index = pressed_square(obj.x+squareW[0]//2, obj.y + squareW[0]//2, square_coordinates, squareW[0], fieldX, fieldY)
+        if obj.correct_move(object_index, white_king_index):
+            white_king_is_check = True
+            print("Check to the white king!", object_index, obj.name )
+
+    for obj in white_figs:
+        object_index = pressed_square(obj.x+squareW[0]//2, obj.y + squareW[0]//2, square_coordinates, squareW[0], fieldX, fieldY)
+        if obj.correct_move(object_index, black_king_index):
+            black_king_is_check = True
+            print("Check to the black king!", object_index, obj.name)
+    return(white_king_is_check, black_king_is_check)
+
+
+
+
+
+
+
 
 
 
@@ -478,7 +512,16 @@ wk2 = Knight(square_coordinates[7][6], "white_knight.png", squareW, "w_knight")
 wq1 = Queen(square_coordinates[7][3], "white_queen.png", squareW, "w_queen")
 wK1 = King(square_coordinates[7][4], "white_king.png", squareW, "w_king")
 
-b_pawns = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8]
+white_figs = [ wp1, wp2, wp3, wp4, wp5, wp6, wp7, wp8,
+               wr1, wr2,
+               wb1, wb2,
+               wk1, wk2,
+               wq1 ]
+black_figs =  [ bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8,
+                 br1, br2,
+                 bb1, bb2,
+                 bk1, bk2,
+                 bq1]
 figures = [bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8,
            wp1, wp2, wp3, wp4, wp5, wp6, wp7, wp8,
            wr1, wr2, br1, br2,
@@ -528,7 +571,8 @@ while not done:
             # Передвижние фигур мышкой
             if e.button == 1:
                 index_set = pressed_square(mouse_x, mouse_y, square_coordinates, squareW[0], fieldX, fieldY)
-                print(index_set)
+                #print(index_set)
+
                 for obj in figures:
                     if collision(mouse_x, mouse_y, obj.x, obj.y, squareW[0]) and obj.is_my_turn(turn):
                         dragging = True
@@ -548,6 +592,8 @@ while not done:
             # Привязка фигур к квадратам
             row_n = 0  # Вспомогательный кал для другого массива статуса квадратов, лучше ничего не придумал
             x_n = 0
+            white_check = check(square_states, white_figs, black_figs)[0]
+            black_check = check(square_states, white_figs, black_figs)[1]
             for row in square_coordinates:
                 for x in row:
                     if dragging_object is not None:
@@ -561,6 +607,7 @@ while not done:
                                 dragging_object.y = x[1]
                                 square_states[row_n][x_n] = dragging_object.name
                                 square_states[index_set[0]][index_set[1]] = "None"
+                                print(white_check, black_check)
                                 if change_turn(dragging_object):
                                     turn = 'b'
                                 else:
@@ -571,8 +618,8 @@ while not done:
                 x_n = 0
                 row_n += 1
             row_n = 0
-            # for rx in square_states:
-            #     print(rx)
+            for rx in square_states:
+                print(rx)
         elif e.type == pygame.MOUSEMOTION:
             if dragging:
                 if off_screen(mouse_x, mouse_y, fieldX, fieldY, fieldSize[0]):
