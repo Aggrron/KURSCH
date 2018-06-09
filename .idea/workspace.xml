@@ -17,10 +17,11 @@
       <file leaf-file-name="Chess.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Chess.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="349" column="32" lean-forward="true" selection-start-line="349" selection-start-column="32" selection-end-line="349" selection-end-column="32" />
+            <state relative-caret-position="234">
+              <caret line="333" column="27" lean-forward="false" selection-start-line="333" selection-start-column="27" selection-end-line="333" selection-end-column="27" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
+                <marker date="1528543570374" expanded="true" signature="22484:22485" ph="..." />
               </folding>
             </state>
           </provider>
@@ -51,7 +52,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-7" />
-    <option name="width" value="1278" />
+    <option name="width" value="974" />
     <option name="height" value="1047" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -211,9 +212,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="1278" height="1047" extended-state="0" />
+    <frame x="-7" y="0" width="974" height="1047" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1141046" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15031315" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24304068" sideWeight="0.16248038" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -260,6 +262,7 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+            <marker date="1528543570374" expanded="true" signature="22484:22485" ph="..." />
           </folding>
         </state>
       </provider>
@@ -270,6 +273,7 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+            <marker date="1528543570374" expanded="true" signature="22484:22485" ph="..." />
           </folding>
         </state>
       </provider>
@@ -280,6 +284,7 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+            <marker date="1528543570374" expanded="true" signature="22484:22485" ph="..." />
           </folding>
         </state>
       </provider>
@@ -290,6 +295,7 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+            <marker date="1528543570374" expanded="true" signature="22484:22485" ph="..." />
           </folding>
         </state>
       </provider>
@@ -300,6 +306,18 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+            <marker date="1528543570374" expanded="true" signature="22484:22485" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Chess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <marker date="1528543570374" expanded="true" signature="22484:22485" ph="..." />
           </folding>
         </state>
       </provider>
@@ -356,10 +374,11 @@
     <entry file="file://$PROJECT_DIR$/KURSCH/Chess.py" />
     <entry file="file://$PROJECT_DIR$/Chess.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="349" column="32" lean-forward="true" selection-start-line="349" selection-start-column="32" selection-end-line="349" selection-end-column="32" />
+        <state relative-caret-position="234">
+          <caret line="333" column="27" lean-forward="false" selection-start-line="333" selection-start-column="27" selection-end-line="333" selection-end-column="27" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+            <marker date="1528543570374" expanded="true" signature="22484:22485" ph="..." />
           </folding>
         </state>
       </provider>
