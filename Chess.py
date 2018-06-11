@@ -339,10 +339,10 @@ def check(states):
         for x in row:
             if x == 'w_king':
                 white_king_index = [row_n, x_n]
-                print(white_king_index, "white king")
+                #print(white_king_index, "white king")
             if x == 'b_king':
                 black_king_index = [row_n, x_n]
-                print(black_king_index, "black king")
+                #print(black_king_index, "black king")
             x_n += 1
         x_n = 0
         row_n += 1
@@ -352,15 +352,58 @@ def check(states):
         if obj.name[0] == 'w':
             if obj.correct_move(object_index, black_king_index):
                 black_king_is_check = True
-                print("Black king Check!", object_index, obj.name)
+                #print("Black king Check!", object_index, obj.name)
         if obj.name[0] == 'b':
             if obj.correct_move(object_index, white_king_index):
                 white_king_is_check = True
-                print("White king Check!", object_index, obj.name)
+                #print("White king Check!", object_index, obj.name)
 
 
     return(white_king_is_check, black_king_is_check)
 
+def checkmate(states, white_check, black_check, figures):
+    saving_moves_white = 0
+    saving_moves_black = 0
+    new_states = list(states)
+    if white_check:
+        for obj in figures:
+            if obj.name[0] == 'w':
+                obj_index = pressed_square(obj.x+squareW[0]//2, obj.y+squareW[0]//2, square_coordinates, squareW[0], fieldX, fieldY)
+                row_n = 0
+                for row in new_states:
+                    x_n = 0
+                    for x in row:
+                        new_states[row_n][x_n] = obj.name
+                        new_states[obj_index[0]][obj_index[1]] = 'None'
+                        if obj.correct_move(obj_index, (row_n, x_n)) and not check(new_states)[0]:
+                            saving_moves_white += 1
+                        new_states[row_n][x_n] = 'None'
+                        new_states[obj_index[0]][obj_index[1]] = obj.name
+                        x_n += 1
+                    row_n += 1
+    if black_check:
+        for obj in figures:
+            if obj.name[0] == 'b':
+                obj_index = pressed_square(obj.x+squareW[0]//2, obj.y+squareW[0]//2, square_coordinates, squareW[0], fieldX, fieldY)
+                row_n = 0
+                for row in new_states:
+                    x_n = 0
+                    for x in row:
+                        new_states[row_n][x_n] = obj.name
+                        new_states[obj_index[0]][obj_index[1]] = 'None'
+                        if obj.correct_move(obj_index, (row_n, x_n)) and not check(new_states)[1]:
+                            saving_moves_black += 1
+                        new_states[row_n][x_n] = 'None'
+                        new_states[obj_index[0]][obj_index[1]] = obj.name
+                        x_n += 1
+                    row_n += 1
+    white_king_checkmate = False
+    black_king_checkmate = False
+    if saving_moves_white == 0:
+        white_king_checkmate = True
+    if saving_moves_black == 0:
+        black_king_checkmate = True
+    return (white_king_checkmate, black_king_checkmate)
 
 
 
@@ -380,9 +423,17 @@ def display_turn(turn, color):
 
 
 def print_text(text, coords, color):
-    textsurface = myfont.render(text, False, color)
-    gameDisplay.blit(textsurface, coords)
+    textsur = myfont.render(text, False, color)
+    gameDisplay.blit(textsur, coords)
 
+
+def print_checks(white_check, black_check):
+    if white_check:
+        print_text('White king Check', (350, 0), white)
+    if black_check:
+        print_text('Black king Check', (350, 0), white)
+    else:
+        print_text(' ', (0, 400), white)
 def change_turn(obj):
     if obj.name[0] == 'w':
         return True
@@ -498,8 +549,8 @@ bb2 = Bishop(square_coordinates[0][5], "black_bishop.png", squareW, "b_bishop")
 bk1 = Knight(square_coordinates[0][1], "black_knight.png", squareW, "b_knight")
 bk2 = Knight(square_coordinates[0][6], "black_knight.png", squareW, "b_knight")
 
-bq1 = Queen(square_coordinates[0][4], "black_queen.png", squareW, "b_queen")
-bK1 = King(square_coordinates[0][3], "black_king.png", squareW, "b_king")
+bq1 = Queen(square_coordinates[0][3], "black_queen.png", squareW, "b_queen")
+bK1 = King(square_coordinates[0][4], "black_king.png", squareW, "b_king")
 
 wp1 = PawnW(square_coordinates[6][0], "white_pawn.png", squareW, "w_pawn")
 wp2 = PawnW(square_coordinates[6][1], "white_pawn.png", squareW, "w_pawn")
@@ -608,7 +659,15 @@ while not done:
                                 # dragging_object.y = x[1]
                                 white_check = check(square_states)[0]
                                 black_check = check(square_states)[1]
-                                print(white_check, black_check)
+                                #print(white_check, black_check)
+                                if white_check or black_check:
+                                    checkmates = checkmate(square_states, white_check, black_check, figures)
+                                    if checkmates[0]:
+                                        print('White checkmate! Black Power!')
+                                    if checkmates[1]:
+                                        print('Black checkmate! White Power!')
+
+                                # Если на поле шах какому-то королю
                                 if dragging_object.name[0] == 'b' and black_check or dragging_object.name[0] == 'w' and white_check:
                                     square_states[row_n][x_n] = 'None'
                                     dragging_object.return_to_native(index_set, square_coordinates)
@@ -628,8 +687,8 @@ while not done:
                 x_n = 0
                 row_n += 1
             row_n = 0
-            for rx in square_states:
-                print(rx)
+            # for rx in square_states:
+            #     print(rx)
         elif e.type == pygame.MOUSEMOTION:
             if dragging:
 
@@ -646,6 +705,7 @@ while not done:
     gameDisplay.fill(fancyBlue)
     field(fieldX, fieldY)
     display_turn(turn, white)
+    print_checks(check(square_states)[0], check(square_states)[1])
     for obj in figures:
         obj.render()
 
