@@ -1,8 +1,8 @@
 import cx_Freeze
 import os
 
-os.environ['TCL_LIBRARY'] = "C:\\Program Files\\Python36\\tcl\\tcl8.6"
-os.environ['TK_LIBRARY'] = "C:\\Program Files\\Python36\\tcl\\tk8.6"
+os.environ['TCL_LIBRARY'] = r'C:\Users\Acer\AppData\Local\Programs\Python\Python36-32\tcl\tcl8.6'
+os.environ['TK_LIBRARY'] = r'C:\Users\Acer\AppData\Local\Programs\Python\Python36-32\tcl\tk8.6'
 
 executables = [cx_Freeze.Executable("Chess.py")]
 
