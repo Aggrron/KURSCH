@@ -341,7 +341,12 @@ def check(states):
     black_king_index = find_kings(states)[1]
     white_king_is_check = False
     black_king_is_check = False
+
     for obj in figures:
+        # for row_n in range(8):
+        #     for x in range(8):
+        #         if states[row_n][x_n] == obj.name:
+        #             object_index = (row_n, x_n)
         object_index = pressed_square(obj.x+squareW[0]//2, obj.y+squareW[0]//2, square_coordinates, squareW[0], fieldX, fieldY)
         if obj.name[0] == 'w':
             if obj.correct_move(object_index, black_king_index):
@@ -357,6 +362,8 @@ def check(states):
 
 def checkmate(states, white_check, black_check, figures):
     new_states = copy.deepcopy(states)
+    saving_moves_white = 0
+    saving_moves_black = 0
     if white_check:
         for obj in figures:
             if obj.name[0] == 'w':
@@ -367,33 +374,56 @@ def checkmate(states, white_check, black_check, figures):
                         if obj.correct_move(obj_index, (row_n, x_n)):
                             new_states[obj_index[0]][obj_index[1]] = 'None'
                             new_states[row_n][x_n] = obj.name
-                            if not check(new_states)[0]:
-                                print("EST VIXOD")
-                                print(row_n, x_n)
-                                return False
+                            if not check_checker_buf(new_states, figures):
+                                saving_moves_white += 1
                             new_states[obj_index[0]][obj_index[1]] = obj.name
                             new_states[row_n][x_n] = 'None'
-        return True
+        print(saving_moves_white)
+
     if black_check:
         for obj in figures:
             if obj.name[0] == 'b':
-                obj_index = pressed_square(obj.x + squareW[0] // 2, obj.y + squareW[0] // 2, square_coordinates,
-                                              squareW[0], fieldX, fieldY)
-
+                #obj_index = pressed_square(obj.x + squareW[0] // 2, obj.y + squareW[0] // 2, square_coordinates,
+                 #                             squareW[0], fieldX, fieldY)
+                for row_nn in range(8):
+                    for x_nn in range(8):
+                        if new_states[row_nn][x_nn] == obj.name:
+                            obj_index = (row_nn, x_nn)
                 for row_n in range(8):
                     for x_n in range(8):
                         if obj.correct_move(obj_index, (row_n, x_n)):
+                            print(row_n, x_n)
                             new_states[obj_index[0]][obj_index[1]] = 'None'
                             new_states[row_n][x_n] = obj.name
-                            if not check(new_states)[1]:
-                                print("EST VIXOD")
-                                print(row_n, x_n)
-                                return False
+                            if not check_checker_buf(new_states, figures):
+                                saving_moves_black += 1
                             new_states[obj_index[0]][obj_index[1]] = obj.name
                             new_states[row_n][x_n] = 'None'
-        return True
+        print(saving_moves_black)
 
 
+def check_checker_buf(new_states, figures):
+    for obj in figures:
+        if obj.name[0] == 'w':
+            for row_n in range(8):
+                for x_n in range(8):
+                    if new_states[row_n][x_n] == 'b_king':
+                        enemy_king_index = (row_n, x_n)
+                    if new_states[row_n][x_n] == obj.name:
+                        object_index = (row_n, x_n)
+            if obj.correct_move(object_index, enemy_king_index):
+                return True
+
+        if obj.name[0] == 'b':
+            for row_n in range(8):
+                for x_n in range(8):
+                    if new_states[row_n][x_n] == 'w_king':
+                        enemy_king_index = (row_n, x_n)
+                    if new_states[row_n][x_n] == obj.name:
+                        object_index = (row_n, x_n)
+            if obj.correct_move(object_index, enemy_king_index):
+                return True
+    return False
 
 
 
@@ -645,9 +675,9 @@ while not done:
                                 white_check = check(square_states)[0]
                                 black_check = check(square_states)[1]
                                 print(white_check, black_check)
-                                if white_check or black_check:
-                                    if checkmate(square_states, white_check, black_check, figures):
-                                        print('Checkmate!')
+                                # if white_check or black_check:
+                                #     checkmate(square_states, white_check, black_check, figures)
+
 
 
                                 # Если на поле шах какому-то королю
@@ -669,8 +699,8 @@ while not done:
                 x_n = 0
                 row_n += 1
             row_n = 0
-            for rx in square_states:
-                print(rx)
+            # for rx in square_states:
+            #     print(rx)
         elif e.type == pygame.MOUSEMOTION:
             if dragging:
 
@@ -687,7 +717,7 @@ while not done:
     gameDisplay.fill(fancyBlue)
     field(fieldX, fieldY)
     display_turn(turn, white)
-    #print_checks(check(square_states)[0], check(square_states)[1])
+    print_checks(check(square_states)[0], check(square_states)[1])
     for obj in figures:
         obj.render()
 
